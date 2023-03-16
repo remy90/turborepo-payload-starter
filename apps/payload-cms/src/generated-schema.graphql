@@ -1,0 +1,1450 @@
+type Query {
+  User(id: String!, draft: Boolean): User
+  Users(where: User_where, draft: Boolean, page: Int, limit: Int, sort: String): Users
+  docAccessUser(id: String!): usersDocAccess
+  meUser: usersMe
+  initializedUser: Boolean
+  Page(id: String!, draft: Boolean): Page
+  Pages(where: Page_where, draft: Boolean, page: Int, limit: Int, sort: String): Pages
+  docAccessPage(id: String!): pagesDocAccess
+  versionPage(id: String): PageVersion
+  versionsPages(where: versionsPage_where, page: Int, limit: Int, sort: String): versionsPages
+  MainMenu(draft: Boolean): MainMenu
+  docAccessMainMenu: main_menuDocAccess
+  Preference(key: String): Preference
+  Access: Access
+}
+
+type User {
+  id: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: EmailAddress
+  resetPasswordToken: String
+  resetPasswordExpiration: DateTime
+  loginAttempts: Float
+  lockUntil: DateTime
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+"""
+A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/.
+"""
+scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
+
+type Users {
+  docs: [User]
+  totalDocs: Int
+  offset: Int
+  limit: Int
+  totalPages: Int
+  page: Int
+  pagingCounter: Int
+  hasPrevPage: Boolean
+  hasNextPage: Boolean
+  prevPage: Int
+  nextPage: Int
+}
+
+input User_where {
+  email: User_email_operator
+  id: User_id_operator
+  createdAt: User_createdAt_operator
+  updatedAt: User_updatedAt_operator
+  OR: [User_where_or]
+  AND: [User_where_and]
+}
+
+input User_email_operator {
+  equals: EmailAddress
+  not_equals: EmailAddress
+  like: EmailAddress
+  contains: EmailAddress
+  in: [EmailAddress]
+  not_in: [EmailAddress]
+  all: [EmailAddress]
+  exists: Boolean
+}
+
+input User_id_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+input User_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input User_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input User_where_or {
+  email: User_email_operator
+  id: User_id_operator
+  createdAt: User_createdAt_operator
+  updatedAt: User_updatedAt_operator
+}
+
+input User_where_and {
+  email: User_email_operator
+  id: User_id_operator
+  createdAt: User_createdAt_operator
+  updatedAt: User_updatedAt_operator
+}
+
+type usersDocAccess {
+  fields: UsersDocAccessFields
+  create: UsersCreateDocAccess
+  read: UsersReadDocAccess
+  update: UsersUpdateDocAccess
+  delete: UsersDeleteDocAccess
+  unlock: UsersUnlockDocAccess
+}
+
+type UsersDocAccessFields {
+  email: UsersDocAccessFields_email
+  password: UsersDocAccessFields_password
+}
+
+type UsersDocAccessFields_email {
+  create: UsersDocAccessFields_email_Create
+  read: UsersDocAccessFields_email_Read
+  update: UsersDocAccessFields_email_Update
+  delete: UsersDocAccessFields_email_Delete
+}
+
+type UsersDocAccessFields_email_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_email_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password {
+  create: UsersDocAccessFields_password_Create
+  read: UsersDocAccessFields_password_Read
+  update: UsersDocAccessFields_password_Update
+  delete: UsersDocAccessFields_password_Delete
+}
+
+type UsersDocAccessFields_password_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_password_Delete {
+  permission: Boolean!
+}
+
+type UsersCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
+type UsersReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUnlockDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type usersMe {
+  token: String
+  user: User
+  exp: Int
+  collection: String
+}
+
+type Page {
+  id: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String
+  slug: String
+  richText(depth: Int): JSON
+  _status: Page__status
+}
+
+enum Page__status {
+  draft
+  published
+}
+
+type Pages {
+  docs: [Page]
+  totalDocs: Int
+  offset: Int
+  limit: Int
+  totalPages: Int
+  page: Int
+  pagingCounter: Int
+  hasPrevPage: Boolean
+  hasNextPage: Boolean
+  prevPage: Int
+  nextPage: Int
+}
+
+input Page_where {
+  title: Page_title_operator
+  slug: Page_slug_operator
+  richText: Page_richText_operator
+  _status: Page__status_operator
+  id: Page_id_operator
+  createdAt: Page_createdAt_operator
+  updatedAt: Page_updatedAt_operator
+  OR: [Page_where_or]
+  AND: [Page_where_and]
+}
+
+input Page_title_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Page_slug_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Page_richText_operator {
+  equals: JSON
+  not_equals: JSON
+  like: JSON
+  contains: JSON
+}
+
+input Page__status_operator {
+  equals: Page__status_Input
+  not_equals: Page__status_Input
+  in: [Page__status_Input]
+  not_in: [Page__status_Input]
+  all: [Page__status_Input]
+  exists: Boolean
+}
+
+enum Page__status_Input {
+  draft
+  published
+}
+
+input Page_id_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Page_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Page_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Page_where_or {
+  title: Page_title_operator
+  slug: Page_slug_operator
+  richText: Page_richText_operator
+  _status: Page__status_operator
+  id: Page_id_operator
+  createdAt: Page_createdAt_operator
+  updatedAt: Page_updatedAt_operator
+}
+
+input Page_where_and {
+  title: Page_title_operator
+  slug: Page_slug_operator
+  richText: Page_richText_operator
+  _status: Page__status_operator
+  id: Page_id_operator
+  createdAt: Page_createdAt_operator
+  updatedAt: Page_updatedAt_operator
+}
+
+type pagesDocAccess {
+  fields: PagesDocAccessFields
+  create: PagesCreateDocAccess
+  read: PagesReadDocAccess
+  update: PagesUpdateDocAccess
+  delete: PagesDeleteDocAccess
+  readVersions: PagesReadVersionsDocAccess
+}
+
+type PagesDocAccessFields {
+  title: PagesDocAccessFields_title
+  slug: PagesDocAccessFields_slug
+  richText: PagesDocAccessFields_richText
+  _status: PagesDocAccessFields__status
+}
+
+type PagesDocAccessFields_title {
+  create: PagesDocAccessFields_title_Create
+  read: PagesDocAccessFields_title_Read
+  update: PagesDocAccessFields_title_Update
+  delete: PagesDocAccessFields_title_Delete
+}
+
+type PagesDocAccessFields_title_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_title_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_title_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_title_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_slug {
+  create: PagesDocAccessFields_slug_Create
+  read: PagesDocAccessFields_slug_Read
+  update: PagesDocAccessFields_slug_Update
+  delete: PagesDocAccessFields_slug_Delete
+}
+
+type PagesDocAccessFields_slug_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_slug_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_slug_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_slug_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_richText {
+  create: PagesDocAccessFields_richText_Create
+  read: PagesDocAccessFields_richText_Read
+  update: PagesDocAccessFields_richText_Update
+  delete: PagesDocAccessFields_richText_Delete
+}
+
+type PagesDocAccessFields_richText_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_richText_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_richText_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_richText_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields__status {
+  create: PagesDocAccessFields__status_Create
+  read: PagesDocAccessFields__status_Read
+  update: PagesDocAccessFields__status_Update
+  delete: PagesDocAccessFields__status_Delete
+}
+
+type PagesDocAccessFields__status_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields__status_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields__status_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields__status_Delete {
+  permission: Boolean!
+}
+
+type PagesCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PagesReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PagesUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PagesDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PagesReadVersionsDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PageVersion {
+  parent: Page
+  version: PageVersion_Version
+  createdAt: DateTime
+  updatedAt: DateTime
+  id: String
+}
+
+type PageVersion_Version {
+  title: String
+  slug: String
+  richText(depth: Int): JSON
+  _status: PageVersion_Version__status
+}
+
+enum PageVersion_Version__status {
+  draft
+  published
+}
+
+type versionsPages {
+  docs: [PageVersion]
+  totalDocs: Int
+  offset: Int
+  limit: Int
+  totalPages: Int
+  page: Int
+  pagingCounter: Int
+  hasPrevPage: Boolean
+  hasNextPage: Boolean
+  prevPage: Int
+  nextPage: Int
+}
+
+input versionsPage_where {
+  parent: versionsPage_parent_operator
+  version__title: versionsPage_version__title_operator
+  version__slug: versionsPage_version__slug_operator
+  version__richText: versionsPage_version__richText_operator
+  version___status: versionsPage_version___status_operator
+  createdAt: versionsPage_createdAt_operator
+  updatedAt: versionsPage_updatedAt_operator
+  id: versionsPage_id_operator
+  OR: [versionsPage_where_or]
+  AND: [versionsPage_where_and]
+}
+
+input versionsPage_parent_operator {
+  equals: String
+  not_equals: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsPage_version__title_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input versionsPage_version__slug_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input versionsPage_version__richText_operator {
+  equals: JSON
+  not_equals: JSON
+  like: JSON
+  contains: JSON
+}
+
+input versionsPage_version___status_operator {
+  equals: versionsPage_version___status_Input
+  not_equals: versionsPage_version___status_Input
+  in: [versionsPage_version___status_Input]
+  not_in: [versionsPage_version___status_Input]
+  all: [versionsPage_version___status_Input]
+  exists: Boolean
+}
+
+enum versionsPage_version___status_Input {
+  draft
+  published
+}
+
+input versionsPage_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input versionsPage_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input versionsPage_id_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input versionsPage_where_or {
+  parent: versionsPage_parent_operator
+  version__title: versionsPage_version__title_operator
+  version__slug: versionsPage_version__slug_operator
+  version__richText: versionsPage_version__richText_operator
+  version___status: versionsPage_version___status_operator
+  createdAt: versionsPage_createdAt_operator
+  updatedAt: versionsPage_updatedAt_operator
+  id: versionsPage_id_operator
+}
+
+input versionsPage_where_and {
+  parent: versionsPage_parent_operator
+  version__title: versionsPage_version__title_operator
+  version__slug: versionsPage_version__slug_operator
+  version__richText: versionsPage_version__richText_operator
+  version___status: versionsPage_version___status_operator
+  createdAt: versionsPage_createdAt_operator
+  updatedAt: versionsPage_updatedAt_operator
+  id: versionsPage_id_operator
+}
+
+type MainMenu {
+  navItems: [MainMenu_NavItems!]
+}
+
+type MainMenu_NavItems {
+  link: MainMenu_NavItems_Link
+  id: String
+}
+
+type MainMenu_NavItems_Link {
+  type: MainMenu_NavItems_Link_type
+  newTab: Boolean
+  reference: MainMenu_NavItems_Link_Reference_Relationship
+  url: String
+  label: String
+}
+
+enum MainMenu_NavItems_Link_type {
+  reference
+  custom
+}
+
+type MainMenu_NavItems_Link_Reference_Relationship {
+  relationTo: MainMenu_NavItems_Link_Reference_RelationTo
+  value: MainMenu_NavItems_Link_Reference
+}
+
+enum MainMenu_NavItems_Link_Reference_RelationTo {
+  pages
+}
+
+union MainMenu_NavItems_Link_Reference = Page
+
+type main_menuDocAccess {
+  fields: MainMenuDocAccessFields
+  read: MainMenuReadDocAccess
+  update: MainMenuUpdateDocAccess
+}
+
+type MainMenuDocAccessFields {
+  navItems: MainMenuDocAccessFields_navItems
+}
+
+type MainMenuDocAccessFields_navItems {
+  create: MainMenuDocAccessFields_navItems_Create
+  read: MainMenuDocAccessFields_navItems_Read
+  update: MainMenuDocAccessFields_navItems_Update
+  delete: MainMenuDocAccessFields_navItems_Delete
+  fields: MainMenuDocAccessFields_navItems_Fields
+}
+
+type MainMenuDocAccessFields_navItems_Create {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_Read {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_Update {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_Delete {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_Fields {
+  link: MainMenuDocAccessFields_navItems_link
+  id: MainMenuDocAccessFields_navItems_id
+}
+
+type MainMenuDocAccessFields_navItems_link {
+  create: MainMenuDocAccessFields_navItems_link_Create
+  read: MainMenuDocAccessFields_navItems_link_Read
+  update: MainMenuDocAccessFields_navItems_link_Update
+  delete: MainMenuDocAccessFields_navItems_link_Delete
+  fields: MainMenuDocAccessFields_navItems_link_Fields
+}
+
+type MainMenuDocAccessFields_navItems_link_Create {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_Read {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_Update {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_Delete {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_Fields {
+  type: MainMenuDocAccessFields_navItems_link_type
+  newTab: MainMenuDocAccessFields_navItems_link_newTab
+  reference: MainMenuDocAccessFields_navItems_link_reference
+  url: MainMenuDocAccessFields_navItems_link_url
+  label: MainMenuDocAccessFields_navItems_link_label
+}
+
+type MainMenuDocAccessFields_navItems_link_type {
+  create: MainMenuDocAccessFields_navItems_link_type_Create
+  read: MainMenuDocAccessFields_navItems_link_type_Read
+  update: MainMenuDocAccessFields_navItems_link_type_Update
+  delete: MainMenuDocAccessFields_navItems_link_type_Delete
+}
+
+type MainMenuDocAccessFields_navItems_link_type_Create {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_type_Read {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_type_Update {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_type_Delete {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_newTab {
+  create: MainMenuDocAccessFields_navItems_link_newTab_Create
+  read: MainMenuDocAccessFields_navItems_link_newTab_Read
+  update: MainMenuDocAccessFields_navItems_link_newTab_Update
+  delete: MainMenuDocAccessFields_navItems_link_newTab_Delete
+}
+
+type MainMenuDocAccessFields_navItems_link_newTab_Create {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_newTab_Read {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_newTab_Update {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_newTab_Delete {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_reference {
+  create: MainMenuDocAccessFields_navItems_link_reference_Create
+  read: MainMenuDocAccessFields_navItems_link_reference_Read
+  update: MainMenuDocAccessFields_navItems_link_reference_Update
+  delete: MainMenuDocAccessFields_navItems_link_reference_Delete
+}
+
+type MainMenuDocAccessFields_navItems_link_reference_Create {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_reference_Read {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_reference_Update {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_reference_Delete {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_url {
+  create: MainMenuDocAccessFields_navItems_link_url_Create
+  read: MainMenuDocAccessFields_navItems_link_url_Read
+  update: MainMenuDocAccessFields_navItems_link_url_Update
+  delete: MainMenuDocAccessFields_navItems_link_url_Delete
+}
+
+type MainMenuDocAccessFields_navItems_link_url_Create {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_url_Read {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_url_Update {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_url_Delete {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_label {
+  create: MainMenuDocAccessFields_navItems_link_label_Create
+  read: MainMenuDocAccessFields_navItems_link_label_Read
+  update: MainMenuDocAccessFields_navItems_link_label_Update
+  delete: MainMenuDocAccessFields_navItems_link_label_Delete
+}
+
+type MainMenuDocAccessFields_navItems_link_label_Create {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_label_Read {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_label_Update {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_link_label_Delete {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_id {
+  create: MainMenuDocAccessFields_navItems_id_Create
+  read: MainMenuDocAccessFields_navItems_id_Read
+  update: MainMenuDocAccessFields_navItems_id_Update
+  delete: MainMenuDocAccessFields_navItems_id_Delete
+}
+
+type MainMenuDocAccessFields_navItems_id_Create {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_id_Read {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_id_Update {
+  permission: Boolean!
+}
+
+type MainMenuDocAccessFields_navItems_id_Delete {
+  permission: Boolean!
+}
+
+type MainMenuReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type MainMenuUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type Preference {
+  key: String!
+  value: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Access {
+  canAccessAdmin: Boolean!
+  users: usersAccess
+  pages: pagesAccess
+  main_menu: main_menuAccess
+}
+
+type usersAccess {
+  fields: UsersFields
+  create: UsersCreateAccess
+  read: UsersReadAccess
+  update: UsersUpdateAccess
+  delete: UsersDeleteAccess
+  unlock: UsersUnlockAccess
+}
+
+type UsersFields {
+  email: UsersFields_email
+  password: UsersFields_password
+}
+
+type UsersFields_email {
+  create: UsersFields_email_Create
+  read: UsersFields_email_Read
+  update: UsersFields_email_Update
+  delete: UsersFields_email_Delete
+}
+
+type UsersFields_email_Create {
+  permission: Boolean!
+}
+
+type UsersFields_email_Read {
+  permission: Boolean!
+}
+
+type UsersFields_email_Update {
+  permission: Boolean!
+}
+
+type UsersFields_email_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_password {
+  create: UsersFields_password_Create
+  read: UsersFields_password_Read
+  update: UsersFields_password_Update
+  delete: UsersFields_password_Delete
+}
+
+type UsersFields_password_Create {
+  permission: Boolean!
+}
+
+type UsersFields_password_Read {
+  permission: Boolean!
+}
+
+type UsersFields_password_Update {
+  permission: Boolean!
+}
+
+type UsersFields_password_Delete {
+  permission: Boolean!
+}
+
+type UsersCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type UsersUnlockAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type pagesAccess {
+  fields: PagesFields
+  create: PagesCreateAccess
+  read: PagesReadAccess
+  update: PagesUpdateAccess
+  delete: PagesDeleteAccess
+  readVersions: PagesReadVersionsAccess
+}
+
+type PagesFields {
+  title: PagesFields_title
+  slug: PagesFields_slug
+  richText: PagesFields_richText
+  _status: PagesFields__status
+}
+
+type PagesFields_title {
+  create: PagesFields_title_Create
+  read: PagesFields_title_Read
+  update: PagesFields_title_Update
+  delete: PagesFields_title_Delete
+}
+
+type PagesFields_title_Create {
+  permission: Boolean!
+}
+
+type PagesFields_title_Read {
+  permission: Boolean!
+}
+
+type PagesFields_title_Update {
+  permission: Boolean!
+}
+
+type PagesFields_title_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_slug {
+  create: PagesFields_slug_Create
+  read: PagesFields_slug_Read
+  update: PagesFields_slug_Update
+  delete: PagesFields_slug_Delete
+}
+
+type PagesFields_slug_Create {
+  permission: Boolean!
+}
+
+type PagesFields_slug_Read {
+  permission: Boolean!
+}
+
+type PagesFields_slug_Update {
+  permission: Boolean!
+}
+
+type PagesFields_slug_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_richText {
+  create: PagesFields_richText_Create
+  read: PagesFields_richText_Read
+  update: PagesFields_richText_Update
+  delete: PagesFields_richText_Delete
+}
+
+type PagesFields_richText_Create {
+  permission: Boolean!
+}
+
+type PagesFields_richText_Read {
+  permission: Boolean!
+}
+
+type PagesFields_richText_Update {
+  permission: Boolean!
+}
+
+type PagesFields_richText_Delete {
+  permission: Boolean!
+}
+
+type PagesFields__status {
+  create: PagesFields__status_Create
+  read: PagesFields__status_Read
+  update: PagesFields__status_Update
+  delete: PagesFields__status_Delete
+}
+
+type PagesFields__status_Create {
+  permission: Boolean!
+}
+
+type PagesFields__status_Read {
+  permission: Boolean!
+}
+
+type PagesFields__status_Update {
+  permission: Boolean!
+}
+
+type PagesFields__status_Delete {
+  permission: Boolean!
+}
+
+type PagesCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PagesReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PagesUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PagesDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type PagesReadVersionsAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type main_menuAccess {
+  fields: MainMenuFields
+  read: MainMenuReadAccess
+  update: MainMenuUpdateAccess
+}
+
+type MainMenuFields {
+  navItems: MainMenuFields_navItems
+}
+
+type MainMenuFields_navItems {
+  create: MainMenuFields_navItems_Create
+  read: MainMenuFields_navItems_Read
+  update: MainMenuFields_navItems_Update
+  delete: MainMenuFields_navItems_Delete
+  fields: MainMenuFields_navItems_Fields
+}
+
+type MainMenuFields_navItems_Create {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_Read {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_Update {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_Delete {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_Fields {
+  link: MainMenuFields_navItems_link
+  id: MainMenuFields_navItems_id
+}
+
+type MainMenuFields_navItems_link {
+  create: MainMenuFields_navItems_link_Create
+  read: MainMenuFields_navItems_link_Read
+  update: MainMenuFields_navItems_link_Update
+  delete: MainMenuFields_navItems_link_Delete
+  fields: MainMenuFields_navItems_link_Fields
+}
+
+type MainMenuFields_navItems_link_Create {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_Read {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_Update {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_Delete {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_Fields {
+  type: MainMenuFields_navItems_link_type
+  newTab: MainMenuFields_navItems_link_newTab
+  reference: MainMenuFields_navItems_link_reference
+  url: MainMenuFields_navItems_link_url
+  label: MainMenuFields_navItems_link_label
+}
+
+type MainMenuFields_navItems_link_type {
+  create: MainMenuFields_navItems_link_type_Create
+  read: MainMenuFields_navItems_link_type_Read
+  update: MainMenuFields_navItems_link_type_Update
+  delete: MainMenuFields_navItems_link_type_Delete
+}
+
+type MainMenuFields_navItems_link_type_Create {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_type_Read {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_type_Update {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_type_Delete {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_newTab {
+  create: MainMenuFields_navItems_link_newTab_Create
+  read: MainMenuFields_navItems_link_newTab_Read
+  update: MainMenuFields_navItems_link_newTab_Update
+  delete: MainMenuFields_navItems_link_newTab_Delete
+}
+
+type MainMenuFields_navItems_link_newTab_Create {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_newTab_Read {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_newTab_Update {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_newTab_Delete {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_reference {
+  create: MainMenuFields_navItems_link_reference_Create
+  read: MainMenuFields_navItems_link_reference_Read
+  update: MainMenuFields_navItems_link_reference_Update
+  delete: MainMenuFields_navItems_link_reference_Delete
+}
+
+type MainMenuFields_navItems_link_reference_Create {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_reference_Read {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_reference_Update {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_reference_Delete {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_url {
+  create: MainMenuFields_navItems_link_url_Create
+  read: MainMenuFields_navItems_link_url_Read
+  update: MainMenuFields_navItems_link_url_Update
+  delete: MainMenuFields_navItems_link_url_Delete
+}
+
+type MainMenuFields_navItems_link_url_Create {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_url_Read {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_url_Update {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_url_Delete {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_label {
+  create: MainMenuFields_navItems_link_label_Create
+  read: MainMenuFields_navItems_link_label_Read
+  update: MainMenuFields_navItems_link_label_Update
+  delete: MainMenuFields_navItems_link_label_Delete
+}
+
+type MainMenuFields_navItems_link_label_Create {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_label_Read {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_label_Update {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_link_label_Delete {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_id {
+  create: MainMenuFields_navItems_id_Create
+  read: MainMenuFields_navItems_id_Read
+  update: MainMenuFields_navItems_id_Update
+  delete: MainMenuFields_navItems_id_Delete
+}
+
+type MainMenuFields_navItems_id_Create {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_id_Read {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_id_Update {
+  permission: Boolean!
+}
+
+type MainMenuFields_navItems_id_Delete {
+  permission: Boolean!
+}
+
+type MainMenuReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type MainMenuUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type Mutation {
+  createUser(data: mutationUserInput!, draft: Boolean): User
+  updateUser(id: String!, data: mutationUserUpdateInput!, draft: Boolean, autosave: Boolean): User
+  deleteUser(id: String!): User
+  refreshTokenUser(token: String): usersRefreshedUser
+  logoutUser: String
+  unlockUser(email: String!): Boolean!
+  loginUser(email: String, password: String): usersLoginResult
+  forgotPasswordUser(email: String!, disableEmail: Boolean, expiration: Int): Boolean!
+  resetPasswordUser(token: String, password: String): usersResetPassword
+  verifyEmailUser(token: String): Boolean
+  createPage(data: mutationPageInput!, draft: Boolean): Page
+  updatePage(id: String!, data: mutationPageUpdateInput!, draft: Boolean, autosave: Boolean): Page
+  deletePage(id: String!): Page
+  restoreVersionPage(id: String): Page
+  updateMainMenu(data: mutationMainMenuInput!, draft: Boolean): MainMenu
+  updatePreference(key: String!, value: JSON): Preference
+  deletePreference(key: String!): Preference
+}
+
+input mutationUserInput {
+  email: String
+  resetPasswordToken: String
+  resetPasswordExpiration: String
+  loginAttempts: Float
+  lockUntil: String
+  password: String!
+}
+
+input mutationUserUpdateInput {
+  email: String
+  resetPasswordToken: String
+  resetPasswordExpiration: String
+  loginAttempts: Float
+  lockUntil: String
+  password: String
+}
+
+type usersRefreshedUser {
+  user: usersJWT
+  refreshedToken: String
+  exp: Int
+}
+
+type usersJWT {
+  email: EmailAddress!
+  collection: String!
+}
+
+type usersLoginResult {
+  token: String
+  user: User
+  exp: Int
+}
+
+type usersResetPassword {
+  token: String
+  user: User
+}
+
+input mutationPageInput {
+  title: String!
+  slug: String
+  richText: JSON!
+  _status: Page__status_MutationInput
+}
+
+enum Page__status_MutationInput {
+  draft
+  published
+}
+
+input mutationPageUpdateInput {
+  title: String
+  slug: String
+  richText: JSON
+  _status: PageUpdate__status_MutationInput
+}
+
+enum PageUpdate__status_MutationInput {
+  draft
+  published
+}
+
+input mutationMainMenuInput {
+  navItems: [mutationMainMenu_NavItemsInput]
+}
+
+input mutationMainMenu_NavItemsInput {
+  link: mutationMainMenu_NavItems_LinkInput
+  id: String
+}
+
+input mutationMainMenu_NavItems_LinkInput {
+  type: String
+  newTab: Boolean
+  reference: MainMenu_NavItems_Link_ReferenceRelationshipInput
+  url: String
+  label: String!
+}
+
+input MainMenu_NavItems_Link_ReferenceRelationshipInput {
+  relationTo: MainMenu_NavItems_Link_ReferenceRelationshipInputRelationTo
+  value: JSON
+}
+
+enum MainMenu_NavItems_Link_ReferenceRelationshipInputRelationTo {
+  pages
+}

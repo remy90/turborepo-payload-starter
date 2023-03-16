@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "tsconfig/nextjs.json",
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next.config.ts",
+    "next.config.ts",
+    "next.config.ts",
+    "next.config.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@graphql/*": [
+        "src/graphql/*"
+      ],
+      "@providers/*": [
+        "src/providers/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@utilities/*": [
+        "utilities/*"
+      ]
+    },
+    "strictNullChecks": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

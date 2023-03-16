@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "turborepo-payload-starter",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "dotenv -e .env.local pnpm build",
+    "dev": "dotenv -e .env.local turbo run dev",
+    "dev:payload": "dotenv -e .env.local turbo run payload-cms#dev",
+    "dev:stge": "dotenv -e .env.stge turbo run dev",
+    "dev:prod": "dotenv -e .env.prod turbo run dev",
+    "lint": "turbo run lint",
+    "wait": "wait-on dev:payload && build",
+    "ci:build": "dotenv -e .env.local pnpm --filter payload-cms build:server --parallel",
+    "format": "prettier --config ./packages/eslint-config-custom/.prettierrc.json --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.0",
+    "dotenv-cli": "^7.1.0",
+    "eslint-config-custom": "workspace:*",
+    "husky": "^8.0.3",
+    "kill-port": "^2.0.1",
+    "lint-staged": "^13.2.0",
+    "prettier": "latest",
+    "turbo": "^1.8.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "pnpm prettier --write",
+      "pnpm eslint --fix"
+    ]
+  },
+  "packageManager": "pnpm@7.27.1",
+  "dependencies": {
+    "wait-on": "^7.0.1"
+  }
+}
